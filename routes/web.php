@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BoutiqueController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('G-Boutique.layouts');
 });
+
+Route::resource('/dashboard', DashboardController::class);
+Route::resource('/boutique', BoutiqueController::class);
