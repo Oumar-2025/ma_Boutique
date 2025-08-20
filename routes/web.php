@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('G-Boutique.layouts');
+    return view('G-Boutique.dashboard');
 });
 
 Route::resource('/dashboard', DashboardController::class);
