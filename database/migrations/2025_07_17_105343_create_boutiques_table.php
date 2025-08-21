@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('adresse')->nullable();
             $table->string('telephone')->nullable();
             $table->string('type_boutique')->nullable();
+
             $table->timestamps();
         });
     }
