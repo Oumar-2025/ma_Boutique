@@ -1,34 +1,31 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Boutiques</h1>
+        <h1 class="mt-4">Annexes</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Détails de la boutique : {{ $boutique->nom }}</li>
+            <li class="breadcrumb-item active">Détails de l'annexe : {{ $annexe->nom }}</li>
         </ol>
         <table class="table">
                 <tr>
                     <tr>
-                        <td><img src="{{ asset($boutique->logo) }}" alt="{{ $boutique->nom }}" class="img-fluid" style="max-width: 200px;"></td>
+                        <th>Boutiques</th>
+                        <td>{{ $annexe->boutique->nom }}</td>
                     </tr>
                     <tr>
-                        <th>Nom :</th>
-                        <td>{{ $boutique->nom }}</td>
+                        <th>Nom annexe :</th>
+                        <td>{{ $annexe->nom }}</td>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>{{ $boutique->email }}</td>
+                        <td>{{ $annexe->email }}</td>
                     </tr>
                     <tr>
                         <th>Téléphone</th>
-                        <td>{{ $boutique->telephone }}</td>
+                        <td>{{ $annexe->telephone }}</td>
                     </tr>
                     <tr>
                         <th>Adresse</th>
-                        <td>{{ $boutique->adresse }}</td>
-                    </tr>
-                    <tr>
-                        <th>Type de boutiques</th>
-                        <td>{{ $boutique->type_boutique }}</td>
+                        <td>{{ $annexe->adresse }}</td>
                     </tr>
             </table>
                                 <a href="{{ route('boutique.index') }}" class="btn btn-info btn-sm">Retour</a>

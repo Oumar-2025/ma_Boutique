@@ -40,39 +40,42 @@ class BoutiqueController extends Controller
     {
         $request->validate([
             'nom' => 'required|string|max:100',
-            'icon' => 'nullable|mimes:png,jpg,jpeg,PNG,JPG,JPEG',
+            'logo' => 'nullable|mimes:png,jpg,jpeg,PNG,JPG,JPEG|max:2048',
             'email' => 'nullable|email|unique:boutiques,email',
-            'telephone' => 'required|string',
+            'telephone'      => [
+                'required',
+                'digits:8',
+                'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
+                'unique:clients,telephone',
+            ],
             'adresse' => 'nullable|string',
             'type_boutique' => 'required|string',
+        ], [
+            'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer une autre boutique avec cet email.',
+            'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
+            'telephone.digits' => 'Le numéro doit comporter exactement 8 chiffres.',
+            'telephone.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         ]);
 
         $data = $request->only(['nom', 'email', 'telephone', 'adresse', 'type_boutique']);
 
-        if($request->hasFile('icon')){
-            $fichier = $request->file('icon');
+        if ($request->hasFile('logo')) {
+            $fichier = $request->file('logo');
 
-            // Nom du fichier sans espace + timestamp
-            $nomFichier = 'icon_' . time() . '.' . $fichier->getClientOriginalExtension();
+            // Nom du fichier = nom_boutique_sans_espace + timestamp + extension
+            $nomFichier = preg_replace('/\s+/', '_', strtolower($request->nom)) . '_' . time() . '.' . $fichier->getClientOriginalExtension();
 
-            // Stocker le logo ou icon original est facultatif
-            $fichier->storeAs('logo/originals', $nomFichier, 'public');
+            // Déplacer le fichier directement dans public/assets/img/boutiques
+            $fichier->move(public_path('assets/img/boutiques'), $nomFichier);
 
-            //Chemin pour le stockage
-            $cheminStockage = 'logos/min_' . pathinfo($nomFichier, PATHINFO_FILENAME);
-
-            // Enregistrer dans le stockage public
-            Storage::disk('public')->put($cheminStockage, $fichier);
-            
-            //Enregistrement dans la base de données
-            $data['icon'] = $cheminStockage;
-
-            //Enregistrement le tout dans la bdd á travers le model
-            Boutique::create($data);
-
-            return redirect()->route('boutique.index')->with("success", "Boutique crée avec succés.");
-
+            // Enregistrer le chemin relatif dans la DB
+            $data['logo'] = 'assets/img/boutiques/' . $nomFichier;
         }
+
+        // Création de la boutique
+        Boutique::create($data);
+
+        return redirect()->route('boutique.index')->with('success', 'Boutique ajoutée avec succès.');
     }
 
     /**
@@ -83,7 +86,8 @@ class BoutiqueController extends Controller
      */
     public function show($id)
     {
-        //
+        $boutique = Boutique::findOrFail($id);
+        return view('G-Boutique.Boutique.show', compact('boutique'));
     }
 
     /**
@@ -94,7 +98,8 @@ class BoutiqueController extends Controller
      */
     public function edit($id)
     {
-        //
+        $boutique = Boutique::findOrFail($id);
+        return view('G-Boutique.Boutique.edit', compact('boutique'));
     }
 
     /**
@@ -106,7 +111,38 @@ class BoutiqueController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:100',
+            'logo' => 'nullable|mimes:png,jpg,jpeg,PNG,JPG,JPEG|max:2048',
+            'email' => 'nullable|email|unique:boutiques,email,' . $id,
+            // Validation du numéro malien (8 chiffres et préfixe Malitel ou Orange)
+            'telephone'      => [
+                'required',
+                'digits:8',
+                'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
+                'unique:clients,telephone',
+            ],
+            'adresse' => 'nullable|string',
+            'type_boutique' => 'required|string',
+        ], [
+            'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer une autre boutique avec cet email.',
+            'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
+            'telephone.digits' => 'Le numéro doit comporter exactement 8 chiffres.',
+            'telephone.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+        ]);
+
+        $boutique = Boutique::findOrFail($id);
+        $data = $request->only(['nom', 'email', 'telephone', 'adresse', 'type_boutique']);
+
+        if ($request->hasFile('logo')) {
+            $fichier = $request->file('logo');
+            $nomFichier = preg_replace('/\s+/', '_', strtolower($request->nom)) . '_' . time() . '.' . $fichier->getClientOriginalExtension();
+            $fichier->move(public_path('assets/img/boutiques'), $nomFichier);
+            $data['logo'] = 'assets/img/boutiques/' . $nomFichier;
+        }
+
+        $boutique->update($data);
+        return redirect()->route('boutique.index')->with('success', 'Boutique mise à jour avec succès.');
     }
 
     /**
@@ -117,6 +153,8 @@ class BoutiqueController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $boutique = Boutique::findOrFail($id);
+        $boutique->delete();
+        return redirect()->route('boutique.index')->with('success', 'Boutique supprimée avec succès.');
     }
 }

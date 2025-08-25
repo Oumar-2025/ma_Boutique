@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AnnexeController;
 use App\Http\Controllers\BoutiqueController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +23,5 @@ Route::get('/', function () {
 
 Route::resource('/dashboard', DashboardController::class);
 Route::resource('/boutique', BoutiqueController::class);
+Route::resource('/annexe', AnnexeController::class);
+Route::resource('/client', ClientController::class);

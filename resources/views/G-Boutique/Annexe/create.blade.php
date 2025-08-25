@@ -1,25 +1,20 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
  <div class="container-fluid px-4">
-        <h1 class="mt-4">Boutique</h1>
+        <h1 class="mt-4">Annexe</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Creer une boutique</li>
+            <li class="breadcrumb-item active">Creer une annexe</li>
         </ol>
-        <form action="{{ route('boutique.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('annexe.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="nom" class="form-label">Nom de l'entreprise</label>
+                <label for="nom" class="form-label">Nom de l'annexe</label>
                 <input type="text" name="nom" value="{{ old('nom') }}" class="form-control @error('nom') is-invalid @enderror" id="nom" required>
                 @error('nom')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            <div class="col-md-6">
-                <label for="logo" class="form-label">Logo</label>
-                <input type="file" name="logo" value="{{ old('logo') }}" class="form-control" id="logo">
-
             </div>
             <div class="col-md-6">
                 <label for="iE" class="form-label">Email</label>
@@ -37,14 +32,14 @@
                 <input type="text" name="adresse" value="{{ old('adresse') }}" class="form-control" id="iA">
             </div>
             <div class="col-md-6">
-                <label for="iTb" class="form-label">Type de boutique</label>
-                <select name="type_boutique" id="iTb" class="form-select @error('type_boutique') is-invalid @enderror">
+                <label for="iTb" class="form-label">Boutique</label>
+                <select name="boutique_id" id="iTb" class="form-select @error('boutique_id') is-invalid @enderror">
                     <option value="">--Choisir--</option>
-                    <option value="Alimentation" {{ old('type_boutique') == 'Alimentation' ? 'selected' : '' }}>Alimentation</option>
-                    <option value="Quincaillerie" {{ old('type_boutique') == 'Quincaillerie' ? 'selected' : '' }}>Quincaillerie</option>
-                    <option value="Magasin" {{ old('type_boutique') == 'Magasin' ? 'selected' : '' }}>Magasin</option>
+                    @foreach($boutiques as $boutique)
+                        <option value="{{ $boutique->id }}" {{ old('boutique_id') == $boutique->id ? 'selected' : '' }}>{{ $boutique->nom }}</option>
+                    @endforeach
                 </select>
-                @error('type_boutique')
+                @error('boutique_id')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
