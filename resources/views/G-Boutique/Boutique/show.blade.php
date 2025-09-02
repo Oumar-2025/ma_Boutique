@@ -2,13 +2,17 @@
 @section('contenu')
     <div class="container-fluid px-4">
         <h1 class="mt-4">Boutiques</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Détails de la boutique : {{ $boutique->nom }}</li>
-        </ol>
-        <table class="table">
-                <tr>
+        <div class="card">
+            <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+                <h5 style="color:white;">Détails de la boutique : {{ $boutique->nom }}</h5>
+                <a href="{{ route('boutique.index') }}" class="btn btn-outline-light btn-sm">Liste</a>
+            </div>
+            <div class="card-body px-4 py-3">
+                <table class="table">
                     <tr>
-                        <td><img src="{{ asset($boutique->logo) }}" alt="{{ $boutique->nom }}" class="img-fluid" style="max-width: 200px;"></td>
+                    <tr>
+                        <td><img src="{{ asset($boutique->logo) }}" alt="{{ $boutique->nom }}" class="img-fluid"
+                                style="max-width: 200px;"></td>
                     </tr>
                     <tr>
                         <th>Nom :</th>
@@ -30,9 +34,7 @@
                         <th>Type de boutiques</th>
                         <td>{{ $boutique->type_boutique }}</td>
                     </tr>
-            </table>
-                                <a href="{{ route('boutique.index') }}" class="btn btn-info btn-sm">Retour</a>
+                </table>
+            </div>
         </div>
-    </div>
-
-@endsection
+    @endsection

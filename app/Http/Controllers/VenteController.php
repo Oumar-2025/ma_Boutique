@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produit;
+use App\Models\Vente;
 use Illuminate\Http\Request;
 
 class VenteController extends Controller
@@ -13,7 +15,8 @@ class VenteController extends Controller
      */
     public function index()
     {
-        //
+        $ventes = Vente::all();
+        return view('G-Boutique.Vente.index', compact('ventes'));
     }
 
     /**
@@ -23,7 +26,8 @@ class VenteController extends Controller
      */
     public function create()
     {
-        //
+        $produits = Produit::all();
+        return view('G-Boutique.Vente.create', compact('produits'));
     }
 
     /**

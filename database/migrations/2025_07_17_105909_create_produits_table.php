@@ -23,9 +23,9 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->string('image')->nullable();
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('boutique_id')->nullable()->constrained('boutiques')->onDelete('set null');
-            $table->foreignId('annexe_id')->nullable()->constrained('annexes')->onDelete('set null');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('boutique_id')->nullable()->constrained('boutiques')->onDelete('cascade');
+            $table->foreignId('annexe_id')->nullable()->constrained('annexes')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

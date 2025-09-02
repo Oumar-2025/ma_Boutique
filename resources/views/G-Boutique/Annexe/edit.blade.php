@@ -1,10 +1,13 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
  <div class="container-fluid px-4">
-        <h1 class="mt-4">annexes</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Modifier une annexe</li>
-        </ol>
+        <h1 class="mt-4">Annexes</h1>
+        <div class="card">
+        <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+                    <h5 style="color:white;">Modifier une annexe</h5>
+                    <a href="{{ route('annexe.index') }}" class="btn btn-outline-light btn-sm">Liste</a>
+            </div>
+            <div class="card-body px-4 py-3">
         <form action="{{ route('annexe.update', $annexe->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -21,18 +24,20 @@
                 <label for="iE" class="form-label">Email</label>
                 <input type="email" name="email" value="{{ $annexe->email }}" class="form-control" id="iE">
             </div>
-            <div class="col-md-6">
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-4">
                 <label for="iT" class="form-label">Telephone</label>
                 <input type="text" name="telephone" value="{{ $annexe->telephone }}" class="form-control @error('telephone') is-invalid @enderror" id="iT">
                 @error('telephone')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="iA" class="form-label">Adresse</label>
                 <input type="text" value="{{ $annexe->adresse }}" name="adresse" class="form-control" id="iA">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="iTb" class="form-label">Boutique</label>
                 <select name="boutique_id" id="iTb" class="form-select @error('boutique_id') is-invalid @enderror">
                     @foreach ($boutiques as $boutique)
@@ -58,6 +63,8 @@
             </button>
         </div>
         </form>
+ </div>
+ </div>
  </div>
 
 @endsection

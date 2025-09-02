@@ -40,6 +40,7 @@ class ClientController extends Controller
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'email' => 'nullable|email|unique:clients,email',
+            'adresse' => 'nullable|string|max:255',
             // Validation du numéro malien (8 chiffres et préfixe Malitel ou Orange)
             'telephone'      => [
                 'required',
@@ -47,7 +48,6 @@ class ClientController extends Controller
                 'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
                 'unique:clients,telephone',
             ],
-            'adresse' => 'nullable|string|max:255',
         ], [
             'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer un autre client avec cet email.',
             'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
@@ -112,7 +112,7 @@ class ClientController extends Controller
                 'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
                 'unique:clients,telephone,' . $id,
             ],
-        ],[
+        ], [
             'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer un autre client avec cet email.',
             'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
             'telephone.digits' => 'Le numéro doit comporter exactement 8 chiffres.',

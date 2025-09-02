@@ -2,11 +2,13 @@
 @section('contenu')
     <div class="container-fluid px-4">
         <h1 class="mt-4">Annexes</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Détails de l'annexe : {{ $annexe->nom }}</li>
-        </ol>
-        <table class="table">
-                <tr>
+        <div class="card">
+            <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+                    <h5 style="color:white;">Détails de : {{ $annexe->nom }}</h5>
+                    <a href="{{ route('annexe.index') }}" class="btn btn-outline-light btn-sm">Liste</a>
+            </div>
+            <div class="card-body px-4 py-3">
+                <table class="table">
                     <tr>
                         <th>Boutiques</th>
                         <td>{{ $annexe->boutique->nom }}</td>
@@ -28,7 +30,6 @@
                         <td>{{ $annexe->adresse }}</td>
                     </tr>
             </table>
-                                <a href="{{ route('boutique.index') }}" class="btn btn-info btn-sm">Retour</a>
         </div>
     </div>
 

@@ -105,8 +105,8 @@
                         <div class="collapse" id="collapseFournisseurs" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Afficher</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Ajouter</a>
+                                <a class="nav-link" href="{{ route("fournisseur.index") }}">Afficher</a>
+                                <a class="nav-link" href="{{ route("fournisseur.create") }}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -119,8 +119,8 @@
                         <div class="collapse" id="collapseCategories" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Afficher</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Ajouter</a>
+                                <a class="nav-link" href="{{ route("categorie.index") }}">Afficher</a>
+                                <a class="nav-link" href="{{ route("categorie.create") }}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -132,8 +132,8 @@
                         <div class="collapse" id="collapseProduits" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Afficher</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Ajouter</a>
+                                <a class="nav-link" href="{{ route('produit.index') }}">Afficher</a>
+                                <a class="nav-link" href="{{ route('produit.create') }}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -145,8 +145,8 @@
                         <div class="collapse" id="collapseVente" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Afficher</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Ajouter</a>
+                                <a class="nav-link" href="{{ route("vente.index")}}">Afficher</a>
+                                <a class="nav-link" href="{{ route("vente.create")}}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"

@@ -1,17 +1,16 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
-    <div class="container-fluid px-4">
-        <h1 class="mt-4">Clients</h1>
+    <div class="container-fluid px-4"><br>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
             <li class="breadcrumb-item active">Liste des clients</li>
         </ol>
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4><i class="fas fa-table me-1"></i>Liste des clients</h4>
-                <a href="{{ route('client.create') }}" class="btn btn-primary btn-sm">Ajouter</a>
+        <div class="card">
+            <div class="card-header bg-primary d-flex justify-content-between align-items-center">
+                <h5 style="color:white;">Liste des clients</h5>
+                <a href="{{ route('client.create') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-plus"></i> Ajouter</a>
             </div>
-            <div class="card-body">
+            <div class="card-body px-4 py-3">
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
