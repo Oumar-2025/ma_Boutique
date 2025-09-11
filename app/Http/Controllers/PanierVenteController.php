@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 
 class PanierVenteController extends Controller
 {
-     public function ajouter(Request $request)
+    public function ajouter(Request $request)
     {
         // Validation
         $request->validate([
             'produit_id' => 'required|exists:produits,id',
             'quantite' => 'required|integer|min:1',
-            'prix_vente' => 'required|numeric|min:0',
+            'prix_vente' => 'nullable|numeric|min:0',
         ]);
 
         // Récupérer le produit
@@ -27,7 +27,8 @@ class PanierVenteController extends Controller
             $panier[$produit->id]['quantite'] += $request->quantite;
             $panier[$produit->id]['prix'] = $request->prix_vente ?? $produit->prix_vente;
         } else {
-            $panier[$produit->id] = [
+            $panier[$produit->id] = [ // <<< ici clé = id produit
+                'id' => $produit->id,
                 'nom' => $produit->nom,
                 'quantite' => $request->quantite,
                 'prix' => $request->prix_vente ?? $produit->prix_vente,
@@ -51,5 +52,10 @@ class PanierVenteController extends Controller
         }
 
         return back()->with('success', 'Produit supprimé du panier.');
+    }
+
+    public function viderPanier() {
+        session()->forget('panier');
+        return back()->with('success', 'Panier vidé avec succès.');
     }
 }

@@ -145,8 +145,8 @@
                         <div class="collapse" id="collapseVente" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route("vente.index")}}">Afficher</a>
-                                <a class="nav-link" href="{{ route("vente.create")}}">Ajouter</a>
+                                <a class="nav-link" href="{{ route("ventes.index")}}">Afficher</a>
+                                <a class="nav-link" href="{{ route("ventes.create")}}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"

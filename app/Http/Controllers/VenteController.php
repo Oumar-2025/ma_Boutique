@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Boutique;
+use App\Models\Client;
 use App\Models\Produit;
 use App\Models\Vente;
+use App\Models\VenteDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class VenteController extends Controller
 {
@@ -15,7 +21,7 @@ class VenteController extends Controller
      */
     public function index()
     {
-        $ventes = Vente::all();
+        $ventes = Vente::with('client')->get();
         return view('G-Boutique.Vente.index', compact('ventes'));
     }
 
@@ -27,7 +33,8 @@ class VenteController extends Controller
     public function create()
     {
         $produits = Produit::all();
-        return view('G-Boutique.Vente.create', compact('produits'));
+        $clients = Client::all();
+        return view('G-Boutique.Vente.create', compact('produits', 'clients'));
     }
 
     /**
@@ -38,7 +45,70 @@ class VenteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'client_id'     => 'required|exists:clients,id',
+            'date_vente'    => 'required|date',
+            'mode_paiement' => 'required|string',
+        ]);
+
+        // try {
+        //     DB::beginTransaction();
+
+        $panier = session('panier', []);
+        // dd($panier);
+        if (empty($panier)) {
+            return back()->with('error', 'Le panier est vide');
+        }
+
+        $total = 0;
+
+        // Vérifier le stock AVANT d’insérer
+        foreach ($panier as $item) {
+            $produit = Produit::findOrFail($item['id']);
+
+            if ($produit->stock < $item['quantite']) {
+                throw new \Exception("Stock insuffisant pour le produit {$produit->nom}. Disponible : {$produit->stock}, demandé : {$item['quantite']}");
+            }
+
+            $total += $item['quantite'] * $item['prix'];
+        }
+
+        // Création de la vente
+        $vente = Vente::create([
+            'client_id'    => $request->client_id,
+            'date_vente'   => $request->date_vente,
+            'mode_paiement' => $request->mode_paiement,
+            'total'        => $total,
+            //'user_id'      => auth()->id(),
+        ]);
+
+        // Insertion des détails et décrémentation du stock
+        foreach ($panier as $item) {
+            VenteDetail::create([
+                'vente_id'     => $vente->id,
+                'produit_id'   => $item['id'],
+                'quantite'     => $item['quantite'],
+                'prix_unitaire' => $item['prix'],
+            ]);
+
+            Produit::findOrFail($item['id'])->decrement('stock', $item['quantite']);
+        }
+
+        // DB::commit();
+        if ($request->action === 'valider_imprimer') {
+            // Vider le panier après validation
+        session()->forget('panier');
+            return redirect()->route('ventes.facture', $vente->id);
+        }
+        // Vider le panier après validation
+        session()->forget('panier');
+
+        return back()->with('success', 'Vente enregistrée avec succès ✅');
+
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return back()->withErrors(['error' => $e->getMessage()]);
+        // }
     }
 
     /**
@@ -49,7 +119,10 @@ class VenteController extends Controller
      */
     public function show($id)
     {
-        //
+        //Relation imbriquée
+        $vente = Vente::with('client', 'details.produit')->findOrFail($id);
+        // dd($vente->details);
+        return view('G-Boutique.Vente.show', compact('vente'));
     }
 
     /**
@@ -60,7 +133,9 @@ class VenteController extends Controller
      */
     public function edit($id)
     {
-        //
+        $vente = Vente::with('client')->findOrFail($id);
+        $details = VenteDetail::with('produit')->where('vente_id', $id)->get();
+        return view('G-Boutique.Vente.edit', compact('vente', 'details'));
     }
 
     /**
@@ -72,7 +147,12 @@ class VenteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $request->validate([
+            'client_id'     => 'required|exists:clients,id',
+            'date_vente'    => 'required|date',
+            'mode_paiement' => 'required|string',
+        ]);
     }
 
     /**
@@ -83,6 +163,78 @@ class VenteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vente = Vente::findOrFail($id);
+        $vente->delete();
+        return back()->with('success', 'Vente supprimée avec succès ✅');
+    }
+    //Partie pour modifier et supprimer un détail de vente
+
+    public function updateDetail(Request $request, $id)
+    {
+        // Validation : seule la quantité est modifiable
+        $request->validate([
+            'quantite' => 'required|integer|min:1',
+        ]);
+
+        $detail = VenteDetail::findOrFail($id);
+        $produit = $detail->produit;
+
+        // Gestion du stock
+        $ancienneQuantite = $detail->quantite;
+        $nouvelleQuantite = $request->quantite;
+        $diff = $nouvelleQuantite - $ancienneQuantite;
+
+        if ($diff > 0) {
+            // On augmente la quantité → diminuer le stock
+            if ($produit->stock < $diff) {
+                return back()->with('error', "Stock insuffisant pour {$produit->nom}. Disponible : {$produit->stock}");
+            }
+            $produit->stock -= $diff;
+        } elseif ($diff < 0) {
+            // On diminue la quantité → retourner au stock
+            $produit->stock += abs($diff);
+        }
+
+        $produit->save();
+
+        // Mise à jour de la quantité du détail
+        $detail->quantite = $nouvelleQuantite;
+        $detail->save();
+
+        // Recalculer le total de la vente
+        $vente = Vente::findOrFail($detail->vente_id);
+        $total = $vente->details()->sum(DB::raw('quantite * prix_unitaire'));
+        $vente->update(['total' => $total]);
+
+        return back()->with('success', "Quantité de {$produit->nom} mise à jour ✅");
+    }
+
+
+    public function deleteDetail($id)
+    {
+        $detail = VenteDetail::findOrFail($id);
+        $detail->delete();
+
+        return back()->with('success', 'Détail de vente supprimé avec succès ✅');
+    }
+
+    public function telechargerFacture($id)
+    {
+        $vente = Vente::with(['client', 'details.produit'])->findOrFail($id);
+        $boutique = Boutique::first(); // récupérer les infos de la boutique (logo, nom, etc.)
+
+        $pdf = Pdf::loadView('G-Boutique.vente.facture', compact('vente', 'boutique'))->setPaper('A4', 'portrait');
+
+        $filename = 'facture_vente_' . $vente->id . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    public function showFacture($id)
+    {
+        $vente = Vente::with(['client', 'details.produit'])->findOrFail($id);
+        $boutique = Boutique::first(); // récupérer les infos de la boutique (logo, nom, etc.)
+
+        return view('G-Boutique.vente.facture', compact('vente', 'boutique'));
     }
 }

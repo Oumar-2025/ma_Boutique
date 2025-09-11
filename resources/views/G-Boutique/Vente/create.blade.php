@@ -1,12 +1,12 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
     <div class="container-fluid px-4">
-            <h1 class="mt-4">Produits (stock)</h1>
+        <h1 class="mt-4">Produits (stock)</h1>
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center text-white">
                 <h4 class="row">Vente</h4>
                 <div class="btn-group">
-                    <a href="#" class="btn btn-light btn-sm">
+                    <a href="{{ route('ventes.index') }}" class="btn btn-light btn-sm">
                         <i class="fa-solid fa-list"></i> Afficher
                     </a>
                 </div>
@@ -54,16 +54,16 @@
 
 
 
-                                    <div class="card-footer">
-                                        <!-- Assure-toi que le bouton n'a pas type="submit" -->
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-fw fa-plus"></i>
-                                            <span>Ajouter au pannier</span></button>
-                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
-                                                class="fas fa-fw fa-times"></i>
-                                            <span>Annuler</span></button>
+                                <div class="card-footer">
+                                    <!-- Assure-toi que le bouton n'a pas type="submit" -->
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-fw fa-plus"></i>
+                                        <span>Ajouter au pannier</span></button>
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
+                                            class="fas fa-fw fa-times"></i>
+                                        <span>Annuler</span></button>
 
-                                    </div>
+                                </div>
 
 
                             </form>
@@ -71,143 +71,154 @@
                     </div>
                 </div>
                 {{-- Liste du panier + client + validation --}}
-            <div class="col-md-6">
-                <div class="card mb-3">
-    <div class="card-header bg-info text-white">Colis dans le panier</div>
-    <div class="card-body">
-        @php
-            $totalQuantite = 0;
-            $totalMontant = 0;
-            $totalPU = 0;
-        @endphp
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">Colis dans le panier</div>
+                        <div class="card-body">
+                            @php
+                                $totalQuantite = 0;
+                                $totalMontant = 0;
+                                $totalPU = 0;
+                            @endphp
 
-        <table class="table" id="tablePanier">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Quantité</th>
-                    <th>P.U</th>
-                    <th>Montant</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(session('panier'))
-                    @foreach(session('panier') as $id => $item)
-                        @php
-                            $montant = $item['prix'] * $item['quantite'];
-                            $totalQuantite += $item['quantite'];
-                            $totalPU += $item['prix'];
-                            $totalMontant += $montant;
-                        @endphp
-                        <tr>
-                            <td>{{ $item['nom'] }}</td>
-                            <td>{{ $item['quantite'] }}</td>
-                            <td>{{ number_format($item['prix'], 0, '.', ' ') }}</td>
-                            <td>{{ number_format($montant, 0, '.', ' ') }}</td>
-                            <td>
-                                <form action="{{ route('panier.supprimer', $id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Total</th>
-                    <th>{{ number_format($totalQuantite, 0, '.', ' ') }}</th>
-                    <th>{{ number_format($totalPU, 0, '.', ' ') }} F</th>
-                    <th colspan="2">{{ number_format($totalMontant, 0, '.', ' ') }} F CFA</th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-</div>
+                            <table class="table" id="tablePanier">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Quantité</th>
+                                        <th>P.U</th>
+                                        <th>Montant</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (session('panier'))
+                                        @foreach (session('panier') as $id => $item)
+                                            @php
+                                                $montant = $item['prix'] * $item['quantite'];
+                                                $totalQuantite += $item['quantite'];
+                                                $totalPU += $item['prix'];
+                                                $totalMontant += $montant;
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $item['nom'] }}</td>
+                                                <td>{{ $item['quantite'] }}</td>
+                                                <td>{{ number_format($item['prix'], 0, '.', ' ') }}</td>
+                                                <td>{{ number_format($montant, 0, '.', ' ') }}</td>
+                                                <td>
+                                                    <form action="{{ route('panier.supprimer', $id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-sm btn-danger">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{ number_format($totalQuantite, 0, '.', ' ') }}</th>
+                                        <th>{{ number_format($totalPU, 0, '.', ' ') }} F</th>
+                                        <th colspan="2">{{ number_format($totalMontant, 0, '.', ' ') }} F CFA</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
 
-            </div>
-                            <div class="col-md-12"><br>
+                </div>
+                <div class="col-md-12"><br>
                     {{-- Formulaire de finalisation --}}
-                <div class="card">
-                    <div class="card-header bg-dark mb-3 text-white">Finaliser la vente</div>
-                    <div class="card-body">
-                        <form id="formSubmitPanier" method="POST" action="#">
-                            @csrf
-                            <div class="row mb-3">
-                                <div class="input-group mb-3">
-                                    <div class="flex-grow-1">
-                                        <select id="client_id" name="client_id"
-                                            class="form-select select2 @error('client_id') is-invalid @enderror">
-                                            <option value="">Sélectionner un client</option>
-                                            {{-- @foreach ($clients as $client)
-                                                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                                                    {{ $client->prenom }} {{ $client->nom }} - {{ $client->telephone }}
+                    <div class="card">
+                        <div class="card-header bg-dark mb-3 text-white">Finaliser la vente</div>
+                        <div class="card-body">
+                            <form id="formSubmitPanier" method="POST" action="{{ route('ventes.store') }}">
+                                @csrf
+                                <div class="row mb-3">
+                                    <div class="input-group mb-3">
+                                        <div class="flex-grow-1">
+                                            <select id="client_id" name="client_id"
+                                                class="form-select select2 @error('client_id') is-invalid @enderror">
+                                                <option value="">Sélectionner un client</option>
+                                                @foreach ($clients as $client)
+                                                    <option value="{{ $client->id }}"
+                                                        {{ old('client_id') == $client->id ? 'selected' : '' }}>
+                                                        {{ $client->prenom }} {{ $client->nom }} -
+                                                        {{ $client->telephone }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary" id="button-addon2"
+                                            data-bs-toggle="modal" data-bs-target="#ajoutClientModal">
+                                            <i class="fa-solid fa-user-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    @error('client_id')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+
+                                    <!-- Destinataire -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="mode_paiement" class="form-label">Mode de paiement</label>
+                                            <select name="mode_paiement" id="mode_paiement"
+                                                class="form-select @error('mode_paiement') is-invalid @enderror">
+                                                <option value="">Sélectionner un mode de paiement</option>
+                                                <option value="espece"
+                                                    {{ old('mode_paiement') == 'espece' ? 'selected' : '' }}>Espèce
                                                 </option>
-                                            @endforeach --}}
-                                        </select>
+                                                <option value="orangeMoney"
+                                                    {{ old('mode_paiement') == 'orangeMoney' ? 'selected' : '' }}>Orange
+                                                    Money</option>
+                                                <option value="cheque"
+                                                    {{ old('mode_paiement') == 'cheque' ? 'selected' : '' }}>Chèque
+                                                </option>
+                                            </select>
+                                            @error('mode_paiement')
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="date_vente" class="form-label">Date</label>
+                                            <input type="date" class="form-control @error('date_vente') is-invalid @enderror"
+                                                name="date_vente" value="{{ old('date_vente') }}">
+                                            @error('date_vente')
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-primary" id="button-addon2"
-                                        data-bs-toggle="modal" data-bs-target="#ajoutClientModal">
-                                        <i class="fa-solid fa-user-plus"></i>
-                                    </button>
+
                                 </div>
 
-                                @error('client_id')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                @enderror
-
-                                <!-- Destinataire -->
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="nomdestinat" class="form-label">Nom destinataire</label>
-                                        <input type="text"
-                                            class="form-control @error('nomdestinat') is-invalid @enderror"
-                                            name="nomdestinat" value="{{ old('nomdestinat') }}" placeholder="Nom complet">
-                                        @error('nomdestinat')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="telephonedestinat" class="form-label">Téléphone du destinataire</label>
-                                        <input type="text"
-                                            class="form-control @error('telephonedestinat') is-invalid @enderror"
-                                            name="telephonedestinat" value="{{ old('telephonedestinat') }}"
-                                            placeholder="Téléphone du destinataire">
-                                        @error('telephonedestinat')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            {{-- <input type="hidden" name="etat" value="{{ old('etat', 'en_attente') }}">
-                        <input type="hidden" name="entreprise_id" value="{{ auth()->user()->entreprise_id }}">
-                        <input type="hidden" name="branche_id" value="{{ auth()->user()->branche_id }}">
-                        <input type="hidden" name="user_id" value="{{ auth()->id() }}"> --}}
-                            {{-- <input type="hidden" name="panier_colis" id="panier_colis"> --}}
+                                {{-- <input type="hidden" name="etat" value="{{ old('etat', 'en_attente') }}">
+                                    <input type="hidden" name="entreprise_id" value="{{ auth()->user()->entreprise_id }}">
+                                    <input type="hidden" name="branche_id" value="{{ auth()->user()->branche_id }}">
+                                    <input type="hidden" name="user_id" value="{{ auth()->id() }}"> --}}
+                                {{-- <input type="hidden" name="panier_colis" id="panier_colis"> --}}
 
                                 <div class="card-footer">
                                     <button type="submit" name="action" value="valider_imprimer"
                                         class="btn btn-primary">
                                         <i class="fas fa-fw fa-save"></i>
                                         <span>Enregistré & Imprimé</span></button>
-                                    <button type="submit" name="action" value="valider" class="btn btn-warning">
+                                    <button type="submit" name="action" value="valider"
+                                        class="btn btn-warning">
                                         <i class="fas fa-fw fa-save"></i>
                                         <span>Enregistré</span></button>
-                                    <a href="reset" class="btn btn-outline-secondary"><i
+                                    <a href="{{ route('panier.vider') }}" class="btn btn-outline-secondary"><i
                                             class="fas fa-fw fa-times"></i>
                                         <span>Annuler</span></a>
                                 </div>
 
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
 

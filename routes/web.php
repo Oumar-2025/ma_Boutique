@@ -33,6 +33,13 @@ Route::resource('/client', ClientController::class);
 Route::resource('/fournisseur', FournisseurController::class);
 Route::resource('/categorie', CategorieController::class);
 Route::resource('/produit', ProduitController::class);
-Route::resource('/vente', VenteController::class);
+//Suppression et Edition des details de vente
+Route::put('/detail-vente/update/{id}', [VenteController::class, 'updateDetail'])->name('detail-vente.update');
+Route::delete('/detail-vente/delete/{id}', [VenteController::class, 'deleteDetail'])->name('detail-vente.delete');
+Route::get('/ventes/{id}/facture', [VenteController::class, 'telechargerFacture'])->name('ventes.facture');
+Route::get('/ventes/{id}/show-facture', [VenteController::class, 'showFacture'])->name('ventes.showFacture');
+Route::resource('/ventes', VenteController::class);
+
 Route::post('/panier-vente/ajouter',[PanierVenteController::class,'ajouter'])->name('panier.ajouter');
 Route::delete('/panier-vente/supprimer/{id}',[PanierVenteController::class,'supprimer'])->name('panier.supprimer');
+Route::get('/panier-vente/vider',[PanierVenteController::class,'viderPanier'])->name('panier.vider');
