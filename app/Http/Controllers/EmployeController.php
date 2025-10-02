@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employe;
 use Illuminate\Http\Request;
 
 class EmployeController extends Controller
@@ -13,7 +14,9 @@ class EmployeController extends Controller
      */
     public function index()
     {
-        //
+        $employes = Employe::get();
+
+        return view('G-Boutique.Employes.index', compact('employes'));
     }
 
     /**
@@ -23,7 +26,7 @@ class EmployeController extends Controller
      */
     public function create()
     {
-        //
+        return view('G-Boutique.Employes.create');
     }
 
     /**
@@ -34,7 +37,26 @@ class EmployeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'prenom'    =>'required|string|max:255',
+            'nom'       =>'required|string|max:255',
+            'telephone' =>'required|string|max:100',
+            'email'     =>'required|email|unique:employes,email',
+            'poste'     =>'required|string|',
+            'salaire'   =>'required|numeric|min:0',
+            'nomurg'    =>'nullable|string|max:255',
+            'telurg'    =>'nullable|string|max:100',
+            'relation'  =>'nullable|string|max:255',
+        ]);
+
+        $donnees = $request->all();
+        $data['boutique_id'] = auth()->user()->boutique_id;
+        $data['annexe_id'] = auth()->user()->annexe_id;
+        $data['user_id'] = auth()->id();
+
+        Employe::create($donnees);
+
+        return redirect()->route('employes.index')->with('success', "Employés enregistrer avec succès.");
     }
 
     /**
@@ -45,7 +67,9 @@ class EmployeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employe = Employe::findOrFail($id);
+
+        return view('G-Boutique.Employes.show', compact('employe'));
     }
 
     /**
@@ -56,7 +80,9 @@ class EmployeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employe = Employe::findOrFail($id);
+
+        return view('G-Boutique.Employes.edit', compact('employe'));
     }
 
     /**
@@ -68,7 +94,28 @@ class EmployeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $employe = Employe::findOrFail($id);
+
+        $request->validate([
+            'prenom'    =>'required|string|max:255',
+            'nom'       =>'required|string|max:255',
+            'telephone' =>'required|string|max:100',
+            'email'     =>'required|email|unique:employes,email,' .$id,
+            'poste'     =>'required|string|',
+            'salaire'   =>'required|numeric|min:0',
+            'nomurg'    =>'nullable|string|max:255',
+            'telurg'    =>'nullable|string|max:100',
+            'relation'  =>'nullable|string|max:255',
+        ]);
+
+        $donnees = $request->all();
+        // $data['boutique_id'] = auth()->user()->boutique_id;
+        // $data['annexe_id'] = auth()->user()->annexe_id;
+        // $data['user_id'] = auth()->id();
+
+        $employe->update($donnees);
+
+        return redirect()->route('employes.index')->with('success', "Employés enregistrer avec succès.");
     }
 
     /**
@@ -79,6 +126,9 @@ class EmployeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employe = Employe::findOrFail($id);
+        $employe->delete();
+
+        return redirect()->route('employes.index')->with('success', "Employés supprimer avec succès.");
     }
 }

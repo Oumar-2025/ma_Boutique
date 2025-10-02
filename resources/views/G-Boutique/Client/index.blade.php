@@ -7,7 +7,7 @@
         </ol>
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
-                <h5 style="color:white;">Liste des clients</h5>
+                <h5 style="color:white;">Clients</h5>
                 <a href="{{ route('client.create') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-plus"></i> Ajouter</a>
             </div>
             <div class="card-body px-4 py-3">

@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'plain_password',
+        'role',
+        'boutique_id',
+        'annexe_id',
     ];
 
     /**
@@ -41,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
 }

@@ -83,7 +83,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-muted text-center">Aucun client trouvé.</td>
+                                <td colspan="6" class="text-muted text-center">Aucun fourniseur trouvé.</td>
                             </tr>
                         @endforelse
                     </tbody>

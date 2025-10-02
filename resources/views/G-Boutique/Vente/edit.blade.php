@@ -68,10 +68,10 @@
                             <i class="fa-solid fa-fw fa-save"></i>
                             <span>Modifier</span>
                         </button>
-                        <button type="reset" class="btn btn-info" data-bs-dismiss="modal">
+                        {{-- <button type="reset" class="btn btn-info" data-bs-dismiss="modal">
                             <i class="fa-solid fa-fw fa-times"></i>
                             <span>Annuler</span>
-                        </button>
+                        </button> --}}
                     </div>
                 </form>
             </div>

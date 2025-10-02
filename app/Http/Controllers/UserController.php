@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Annexe;
+use App\Models\Boutique;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -13,7 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::get();
+
+        return view('G-Boutique.Users.index', compact('users'));
     }
 
     /**
@@ -23,7 +30,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $boutiques = Boutique::all();
+        $annexes = Annexe::all();
+        return view('G-Boutique.Users.create', compact('boutiques', 'annexes'));
     }
 
     /**
@@ -34,7 +43,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'name' => 'required|string|max:50',
+            'email' => 'required|email|max:50',
+            // 'ville_id' => 'required|string|max:50',
+            'role' => 'required|string',
+            'boutique_id' => 'nullable|exists:boutiques,id',
+            'annexe_id' => 'nullable|exists:annexes,id',
+        ]);
+
+        // 🔐 Générer un mot de passe aléatoire
+        $plainPassword = Str::random(8); // ex: "a8fjLk9P2z"
+
+        $data = $request->all();
+        $data['password'] = Hash::make($plainPassword);
+        $data['plain_password'] = $plainPassword;  // <- ici on ajoute le mot de passe en clair
+        // $data['boutique_id'] = auth()->user()->boutique_id;
+        // $data['annexe_id'] = auth()->user()->annexe_id;
+        // $data['user_id'] = auth()->user()->id;
+        // $data['creer_par'] = auth()->user()->id;
+
+        //créer un utilisateur
+        User::create($data);
+
+
+    // 🔁 Rediriger vers la page avec la modale et le mot de passe
+    return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès');
+
     }
 
     /**
@@ -45,7 +80,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return view('G-Boutique.Users.show', compact('user'));
     }
 
     /**
@@ -56,7 +93,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return view('G-Boutique.Users.edit', compact('user'));
     }
 
     /**
@@ -68,7 +107,20 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'email' => 'required|email|max:50',
+            // 'ville_id' => 'required|string|max:50',
+            'role' => 'required|string',
+            // 'boutique_id' => 'nullable|exists:boutiques,id',
+            // 'annexe_id' => 'nullable|exists:annexes,id',
+        ]);
+
+        $datas = $request->all();
+        $user->update($datas);
+
+        return redirect()->route('users.index')->with('success', 'Utilisateur mise à jour avec succèss.');
     }
 
     /**
@@ -79,6 +131,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return back()->with('success', 'Utilisateur supprimé avec succès.');
     }
 }

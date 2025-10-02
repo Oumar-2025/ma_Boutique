@@ -1,13 +1,19 @@
 <?php
 
+use App\Http\Controllers\AchatController;
 use App\Http\Controllers\AnnexeController;
 use App\Http\Controllers\BoutiqueController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PanierAchatController;
 use App\Http\Controllers\PanierVenteController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VenteController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +29,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('G-Boutique.dashboard');
+    return view('G-Boutique.Login.login');
 });
+Route::get('/login', function () {
+    return view('G-Boutique.Login.login');
+});
+//Route de connexion
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+//Routes protégées par le middleware 'is-admin'
+Route::group(['middleware' => ['auth', 'is-admin']], function () {
 
 Route::resource('/dashboard', DashboardController::class);
 Route::resource('/boutique', BoutiqueController::class);
@@ -43,3 +57,24 @@ Route::resource('/ventes', VenteController::class);
 Route::post('/panier-vente/ajouter',[PanierVenteController::class,'ajouter'])->name('panier.ajouter');
 Route::delete('/panier-vente/supprimer/{id}',[PanierVenteController::class,'supprimer'])->name('panier.supprimer');
 Route::get('/panier-vente/vider',[PanierVenteController::class,'viderPanier'])->name('panier.vider');
+
+//Route des achats
+Route::post('/panier-achat/ajouter',[PanierAchatController::class,'ajouter'])->name('ajouterAu.panier');
+Route::delete('/panier-achat/supprimer/{id}', [PanierAchatController::class,'supprimer'])->name('supprimerAu.panier');
+Route::get('/panier-achat/vider', [PanierAchatController::class,'viderPanier'])->name('viderAu.panier');
+Route::put('/detail-achat/update/{id}', [AchatController::class, 'updateDetail'])->name('detail-achat.update');
+Route::delete('/detail-achat/delete/{id}', [AchatController::class, 'deleteDetail'])->name('detail-achat.delete');
+Route::get('/achats/{id}/facture', [AchatController::class, 'telechargerFacture'])->name('achats.facture');
+Route::get('/achats/{id}/show-facture', [AchatController::class, 'showFacture'])->name('achats.showFacture');
+Route::resource('/achats', AchatController::class);
+
+//Route employés
+Route::resource('employes', EmployeController::class);
+//Route depenses
+Route::resource('depenses', DepenseController::class);
+
+//Route Utilisateur
+Route::resource('/users', UserController::class);
+
+// require __DIR__.'/auth.php';
+});

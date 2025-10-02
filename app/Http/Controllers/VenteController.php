@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Boutique;
+use App\Models\Caisse;
 use App\Models\Client;
 use App\Models\Produit;
 use App\Models\Vente;
@@ -79,7 +80,9 @@ class VenteController extends Controller
             'date_vente'   => $request->date_vente,
             'mode_paiement' => $request->mode_paiement,
             'total'        => $total,
-            //'user_id'      => auth()->id(),
+            'boutique_id'  => auth()->user()->boutique_id,
+            'annexe_id'    => auth()->user()->annexe_id,
+            'user_id'      => auth()->id(),
         ]);
 
         // Insertion des détails et décrémentation du stock
@@ -93,6 +96,19 @@ class VenteController extends Controller
 
             Produit::findOrFail($item['id'])->decrement('stock', $item['quantite']);
         }
+
+        // Création des mouvements de caisse
+        Caisse::create([
+            'type'         => 'entrée',
+            'montant'      => $total,
+            'description'  => 'Vente ID #' . $vente->id . ' - Client: ' . $vente->client->prenom . ' ' . $vente->client->nom,
+            'date_mouvement' => now(),
+            'source'      => 'vente',
+            'vente_id'    => $vente->id,
+            'boutique_id'  => auth()->user()->boutique_id,
+            // 'annexe_id'    => auth()->user()->annexe_id,
+            'user_id'      => auth()->id(),
+        ]);
 
         // DB::commit();
         if ($request->action === 'valider_imprimer') {

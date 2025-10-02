@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('montant', 10, 0);
             $table->date('date_paiement');
             $table->string('type')->default('salaire'); // ou 'prime', 'bonus', etc.
-            $table->foreignId('boutique_id')->nullable()->constrained('boutiques')->onDelete('set null');
+            $table->foreignId('boutique_id')->nullable()->constrained('boutiques')->onDelete('cascade');
             $table->foreignId('annexe_id')->nullable()->constrained('annexes')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // Qui a validé/paié
             $table->timestamps();

@@ -4,7 +4,7 @@
         <h1 class="mt-4">Client</h1>
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
-                <h5 style="color:white;">Créer une boutique</h5>
+                <h5 style="color:white;">Créer un client</h5>
                 <a href="{{ route('boutique.index') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-list"></i> Liste</a>
             </div>
             <div class="card-body px-4 py-3">

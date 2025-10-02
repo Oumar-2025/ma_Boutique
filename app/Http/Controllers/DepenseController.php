@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caisse;
+use App\Models\Depense;
 use Illuminate\Http\Request;
 
 class DepenseController extends Controller
@@ -13,7 +15,9 @@ class DepenseController extends Controller
      */
     public function index()
     {
-        //
+        $depenses = Depense::get();
+
+        return view('G-Boutique.Depenses.index', compact('depenses'));
     }
 
     /**
@@ -23,7 +27,7 @@ class DepenseController extends Controller
      */
     public function create()
     {
-        //
+        return view('G-Boutique.Depenses.create');
     }
 
     /**
@@ -34,7 +38,33 @@ class DepenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'libelle' => 'required|string',
+            'categorie' => 'required|string',
+            'montant' => 'required|numeric|min:0',
+            'date_paiement' => 'required|date',
+        ]);
+
+        $depense = $request->all();
+        // $depense['boutique_id'] = auth()->user()->boutique_id;
+        // $depense['annexe_id'] = auth()->user()->annexe_id;
+        // $depense['user_id'] = auth()->id();
+
+        Depense::create($depense);
+         // Création des mouvements de caisse
+        // Caisse::create([
+        //     'type'         => 'sortie',
+        //     'montant'      => $request->montant,
+        //     'description'  => 'Dépense ID #' . $depense->id . ' - Libellé: ' . $depense->libelle,
+        //     'date_mouvement' => now(),
+        //     'source'      => 'depense',
+        //     'depense_id'  => $depense->id,
+        //     'boutique_id'  => auth()->user()->boutique_id,
+        //     // 'annexe_id'    => auth()->user()->annexe_id,
+        //     'user_id'      => auth()->id(),
+        // ]);
+
+        return redirect()->route('depenses.index')->with('success', 'Dépense enrégistrée avec succès.');
     }
 
     /**
