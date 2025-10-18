@@ -3,6 +3,7 @@
 use App\Http\Controllers\AchatController;
 use App\Http\Controllers\AnnexeController;
 use App\Http\Controllers\BoutiqueController;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\PanierAchatController;
 use App\Http\Controllers\PanierVenteController;
 use App\Http\Controllers\ProduitController;
@@ -72,6 +74,10 @@ Route::resource('/achats', AchatController::class);
 Route::resource('employes', EmployeController::class);
 //Route depenses
 Route::resource('depenses', DepenseController::class);
+//Route Paiements
+Route::resource('paiements', PaiementController::class);
+//Route Caisses
+Route::resource('caisses', CaisseController::class);
 
 //Route Utilisateur
 Route::resource('/users', UserController::class);

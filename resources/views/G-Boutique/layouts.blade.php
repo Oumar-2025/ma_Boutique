@@ -206,8 +206,21 @@
                         <div class="collapse" id="collapsePaiment" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Afficher</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Ajouter</a>
+                                <a class="nav-link" href="{{ route('paiements.index') }}">Afficher</a>
+                                <a class="nav-link" href="{{ route('paiements.create') }}">Ajouter</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseCaisse" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Caisses
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseCaisse" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('caisses.index') }}">Afficher</a>
+                                <a class="nav-link" href="{{ route('caisses.create') }}">Ajouter</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"

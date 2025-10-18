@@ -50,9 +50,9 @@ class EmployeController extends Controller
         ]);
 
         $donnees = $request->all();
-        $data['boutique_id'] = auth()->user()->boutique_id;
-        $data['annexe_id'] = auth()->user()->annexe_id;
-        $data['user_id'] = auth()->id();
+        $donnees['boutique_id'] = auth()->user()->boutique_id;
+        $donnees['annexe_id'] = auth()->user()->annexe_id;
+        $donnees['user_id'] = auth()->id();
 
         Employe::create($donnees);
 
@@ -109,9 +109,9 @@ class EmployeController extends Controller
         ]);
 
         $donnees = $request->all();
-        // $data['boutique_id'] = auth()->user()->boutique_id;
-        // $data['annexe_id'] = auth()->user()->annexe_id;
-        // $data['user_id'] = auth()->id();
+        $donnees['boutique_id'] = auth()->user()->boutique_id;
+        $donnees['annexe_id'] = auth()->user()->annexe_id;
+        $donnees['user_id'] = auth()->id();
 
         $employe->update($donnees);
 

@@ -74,6 +74,16 @@ class AchatController extends Controller
             $total += $item['quantite'] * $item['prix_achat'];
         }
 
+        $montant = $total;
+        //Vérification du solde de la caisse avant le paiement
+        $entree = Caisse::where('type', 'entree')->sum('montant');
+        $sortie = Caisse::where('type', 'sortie')->sum('montant');
+        $soldeCaisse = $entree - $sortie;
+
+        if($soldeCaisse < $montant){
+            return redirect()->back()->with('error', 'Solde de la caisse insuffisant pour effectuer ce paiement.');
+        }
+
         // Création de l'achat
         $achat = Achat::create([
             'fournisseur_id'    => $request->fournisseur_id,

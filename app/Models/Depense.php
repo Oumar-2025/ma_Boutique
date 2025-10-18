@@ -10,5 +10,10 @@ class Depense extends Model
     use HasFactory;
 
     protected $table = ['depenses'];
-    protected $fillable = ['libelle', 'montant', 'categorie', 'date_paiement', 'boutique_id', 'annexe_id', 'user_id'];
+    protected $fillable = ['libelle', 'montant', 'categorie', 'date_depense', 'boutique_id', 'annexe_id', 'user_id'];
+
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
 }

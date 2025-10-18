@@ -23,15 +23,20 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                         <div class="col-md-5">
+                        <div class="col-md-4">
                             <label for="iC" class="form-label">Categorie</label>
-                            <input type="text" name="categorie" value="{{ old('categorie') }}"
-                                class="form-control @error('categorie') is-invalid @enderror" id="iC">
+                            <select name="categorie" id="iC" class="form-select @error('categorie') is-invalid @enderror">
+                                <option value="" disabled selected>-- Sélectionner --</option>
+                                <option value="Loyer" {{ old('categorie') == 'Loyer' ? 'selected' : '' }}>Loyer</option>
+                                <option value="Entretien" {{ old('categorie') == 'Entretien' ? 'selected' : '' }}>Entretien</option>
+                                <option value="Electricite" {{ old('categorie') == 'Electricite' ? 'selected' : '' }}>Electricité</option>
+                                <option value="Autres" {{ old('categorie') == 'Autres' ? 'selected' : '' }}>Autres</option>
+                            </select>
                             @error('categorie')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                         <div class="col-md-4">
+                        <div class="col-md-4">
                             <label for="iT" class="form-label">Montant</label>
                             <input type="number" min="0" step="1" name="montant" value="{{ old('montant') }}"
                                 class="form-control @error('montant') is-invalid @enderror" id="iT">
@@ -39,11 +44,11 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                         <div class="col-md-3">
-                            <label for="iP" class="form-label">Date de paiement</label>
-                            <input type="date" name="date_paiement" value="{{ old('date_paiement') }}"
-                                class="form-control @error('date_paiement') is-invalid @enderror" id="iP">
-                            @error('date_paiement')
+                         <div class="col-md-4">
+                            <label for="iP" class="form-label">Date de depense</label>
+                            <input type="date" name="date_depense" value="{{ old('date_depense') }}"
+                                class="form-control @error('date_depense') is-invalid @enderror" id="iP">
+                            @error('date_depense')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

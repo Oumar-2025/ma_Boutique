@@ -23,4 +23,19 @@ class Caisse extends Model
         'vente_id',
         'source', // 'vente', 'paiement_salaire', 'depense', 'achat', 'autre'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
+
+    public function annexe()
+    {
+        return $this->belongsTo(Annexe::class);
+    }
 }
