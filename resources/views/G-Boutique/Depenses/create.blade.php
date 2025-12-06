@@ -11,17 +11,6 @@
             <div class="card-body px-4 py-3">
                 <form action="{{ route('depenses.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="libelle" class="form-label">Motif</label>
-                            <textarea type="text" name="libelle"
-                                class="form-control @error('libelle') is-invalid @enderror" id="libelle" required>{{ old('libelle') }}</textarea>
-                            @error('libelle')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="iC" class="form-label">Categorie</label>
@@ -39,7 +28,7 @@
                         <div class="col-md-4">
                             <label for="iT" class="form-label">Montant</label>
                             <input type="number" min="0" step="1" name="montant" value="{{ old('montant') }}"
-                                class="form-control @error('montant') is-invalid @enderror" id="iT">
+                                class="form-control @error('montant') is-invalid @enderror" placeholder="Taper le montant" id="iT">
                             @error('montant')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -53,6 +42,17 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="libelle" class="form-label">Motif</label>
+                            <textarea type="text" name="libelle"
+                                class="form-control @error('libelle') is-invalid @enderror" id="libelle" placeholder="Quel est le motif de la dépense" required>{{ old('libelle') }}</textarea>
+                            @error('libelle')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
 
                         {{-- <input type="hidden" name="boutique_id" value="{{ $boutique->id }}">
                             <input type="hidden" name="annexe_id" value="{{ $annexe->id }}">

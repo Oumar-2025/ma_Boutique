@@ -251,6 +251,6 @@ class AchatController extends Controller
         $achat = Achat::with(['fournisseur', 'details.produit'])->findOrFail($id);
         $boutique = Boutique::first(); // récupérer les infos de la boutique (logo, nom, etc.)
 
-        return view('G-Boutique.achat.facture', compact('achat', 'boutique'));
+        return view('G-Boutique.Achats.facture', compact('achat', 'boutique'));
     }
 }

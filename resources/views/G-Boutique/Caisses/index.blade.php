@@ -63,8 +63,10 @@
                         <th>Montant</th>
                         <th>Source</th>
                         <th>Description</th>
+                         @if(auth()->user()->role == 'super-admin')
                         <th>Boutique</th>
                         <th>Utilisateur</th>
+                        @endif
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -80,8 +82,10 @@
                             <td>{{ number_format($caisse->montant, 0, ',', ' ') }} FCFA</td>
                             <td>{{ ucfirst($caisse->source) }}</td>
                             <td>{{ $caisse->description }}</td>
+                            @if(auth()->user()->role == 'super-admin')
                             <td>{{ $caisse->boutique->nom ?? '-' }}</td>
                             <td>{{ $caisse->user->name ?? '-' }}</td>
+                            @endif
                             <td>
                                 <a href="{{ route('caisses.show', $caisse->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                 <form action="{{ route('caisses.destroy', $caisse->id) }}" method="POST">

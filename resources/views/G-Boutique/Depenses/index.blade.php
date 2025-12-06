@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
                 <h5 style="color:white;">Dépenses</h5>
-                <a href="{{ route('depenses.create') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-plus"></i> Liste</a>
+                <a href="{{ route('depenses.create') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-plus"></i> Ajouter</a>
             </div>
             <div class="card-body px-4 py-3">
                 <table id="datatablesSimple">
@@ -25,7 +25,7 @@
                             <tr class="text-center">
                                 <td>{{ $depense->libelle }}</td>
                                 <td>{{ $depense->montant }}</td>
-                                <td>{{ $depense->date_paiement }}</td>
+                                <td>{{ $depense->date_depense }}</td>
                                 <td>
                                     <a href="{{ route('depenses.show', $depense->id) }}" class="btn btn-link">
                                         <i class="fas fa-eye"></i>

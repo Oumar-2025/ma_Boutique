@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('libelle');
             $table->decimal('montant', 10, 0);
             $table->date('date_depense');
-            $table->string('categorie')->nullable(); // Ex : électricité, loyer, fournitures...
+            $table->string('categorie'); // Ex : électricité, loyer, fournitures...
 
             $table->timestamps();
         });

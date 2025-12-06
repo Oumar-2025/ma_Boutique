@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Caisse;
 use App\Models\Depense;
+use App\Models\Caisse;
 use Illuminate\Http\Request;
 
 class DepenseController extends Controller
@@ -39,45 +39,48 @@ class DepenseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'libelle' => 'required|string',
-            'categorie' => 'required|string',
-            'montant' => 'required|numeric|min:0',
+            'libelle' => 'required|string|max:255',
+            'montant' => 'required|numeric',
+            'categorie' => 'required|string|max:255',
             'date_depense' => 'required|date',
         ]);
 
-        //Vérification du solde de la caisse avant le paiement
+        //Total montant des dépenses
+        $montant = $request->montant;
+
+        //Vérification du solde de la caisse avant les dépenses
         $entree = Caisse::where('type', 'entree')->sum('montant');
         $sortie = Caisse::where('type', 'sortie')->sum('montant');
         $soldeCaisse = $entree - $sortie;
-        if ($soldeCaisse < $request->montant) {
-            return redirect()->back()->with('error', 'Solde de la caisse insuffisant pour enregistrer cette dépense.');
+
+        if($soldeCaisse < $montant){
+            return back()->with('error', 'Solde insuffisant dans la caisse pour effectuer cette dépense.');
         }
 
-        $depense = Depense::create([
-            'libelle' => $request->libelle, 
-            'categorie' => is_array($request->categorie)
-                ? implode(', ', $request->categorie)
-                : $request->categorie,
+        //Création de la dépense
+        $depenses = Depense::create([
+            'libelle' => $request->libelle,
             'montant' => $request->montant,
+            'categorie' => $request->categorie,
             'date_depense' => $request->date_depense,
             'boutique_id' => auth()->user()->boutique_id,
-            'user_id' => auth()->id(),
-        ]);
-        
-         // Création des mouvements de caisse
-        $caisse = Caisse::create([
-            'type'         => 'sortie',
-            'montant'      => $request->montant,
-            'description'  => 'Dépense ID #' . $depense->id . ' - Libellé: ' . $depense->libelle,
-            'date_mouvement' => now(),
-            'source'      => 'autre',
-            'depense_id'  => $depense->id,
-            'boutique_id'  => auth()->user()->boutique_id,
-            // 'annexe_id'    => auth()->user()->annexe_id,
-            'user_id'      => auth()->id(),
+            'annexe_id' => auth()->user()->annexe_id,
+            'user_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('depenses.index')->with('success', 'Dépense enrégistrée avec succès.');
+        //Enregistrement de la dépense dans la caisse
+        $caisses = Caisse::create([
+            'type' => 'sortie',
+            'montant' => $montant,
+            'description' => 'Depense : ' . $request->libelle,
+            'date_mouvement' => now(),
+            'boutique_id' => auth()->user()->boutique_id,
+            'user_id' => auth()->user()->id,
+            'depense_id' => $depenses->id,
+            'source' => 'depense',
+        ]);
+
+        return redirect()->route('depenses.index')->with('success', 'Dépense créée avec succès.');
     }
 
     /**

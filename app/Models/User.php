@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function boutique()
     {
-        return $this->belongsTo(Boutique::class);
+        return $this->belongsTo(Boutique::class, 'boutique_id');
     }
 }

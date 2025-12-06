@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        @if(auth()->user()->role == 'super-admin' && auth()->user()->id == 1)
+                        @if(auth()->user()->role == 'super_admin' && auth()->user()->id == 1)
                         <div class="col-md-6">
                             <label for="boutique" class="form-label">Boutique</label>
                             <select name="boutique_id" id="boutique" class="form-select @error('boutique_id') is-invalid @enderror">

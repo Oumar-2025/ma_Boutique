@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Caisse;
 use App\Models\Employe;
 use App\Models\Paiement;
-use Illuminate\Http\Request;
 
 class PaiementController extends Controller
 {
@@ -16,9 +16,12 @@ class PaiementController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
         $paiements = Paiement::with('employe')
-        ->where('boutique_id', auth()->user()->boutique_id)
+        ->where('boutique_id', $user->boutique_id)
         ->latest()->get();
+
+        return view('G-Boutique.Paiements.index', compact('paiements'));
     }
 
     /**
@@ -84,7 +87,6 @@ class PaiementController extends Controller
         'user_id' => auth()->user()->id,
         'paiement_id' => $paiement->id,
         'source' => 'paiement_salaire',
-
         ]);
 
         // dd( route('paiements.index'));
@@ -100,7 +102,9 @@ class PaiementController extends Controller
      */
     public function show($id)
     {
-        //
+        $paiement = Paiement::findOrFail($id);
+        $employe = Employe::findOrFail($paiement->employe_id);
+        return view('G-Boutique.Paiements.show', compact('paiement', 'employe'));
     }
 
     /**
@@ -134,6 +138,9 @@ class PaiementController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $paiement = Paiement::findOrFail($id);
+        $paiement->delete();
+
+        return redirect()->route('paiements.index')->with('success', 'Paiement supprimé avec succès.');
     }
 }

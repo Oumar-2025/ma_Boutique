@@ -51,7 +51,7 @@
 
                                                 <!-- Header -->
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteModalLabel{{ $employe->id }}">
+                                                    <h5 class="modal-title" id="deleteModalLabel{{ $paiement->employe->id }}">
                                                         Confirmation
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"

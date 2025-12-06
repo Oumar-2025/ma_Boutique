@@ -71,7 +71,7 @@
             </tbody>
         </table>
 
-        <p class="total">Total général : {{ number_format($vente->total, 0, ',', ' ') }} FCFA</p>
+        <p class="total">Total général : {{ number_format($achat->total, 0, ',', ' ') }} FCFA</p>
 
         <div class="footer">
             <p>Merci pour votre confiance !</p>
