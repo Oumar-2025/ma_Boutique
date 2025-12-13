@@ -45,8 +45,7 @@
                         <li>
                             <a class="dropdown-item" href="#"
                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                Déconnexion
-                            </a>
+                                Deconnexion</a>
                         </li>
                     </form>
                     {{-- <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); this.closest('form').submit();">Deconnexion</a></li> --}}
@@ -65,35 +64,35 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Interface</div>
-                        {{-- @if(auth()->user()->role == 'super_admin' || auth()->user()->id === 1) --}}
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                            Boutiques
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('boutique.index') }}">Afficher</a>
-                                <a class="nav-link" href="{{ route('boutique.create') }}">Ajouter</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseAnnexes" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-utensils"></i></div>
-                            Annexes
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseAnnexes" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('annexe.index') }}">Afficher</a>
-                                <a class="nav-link" href="{{ route('annexe.create') }}">Ajouter</a>
-                            </nav>
-                        </div>
-                        {{-- @endif --}}
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        @if (auth()->user()->role == 'super_admin' && auth()->user()->id === 1)
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                Boutiques
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ route('boutique.index') }}">Afficher</a>
+                                    <a class="nav-link" href="{{ route('boutique.create') }}">Ajouter</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                data-bs-target="#collapseAnnexes" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-utensils"></i></div>
+                                Annexes
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseAnnexes" aria-labelledby="headingOne"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ route('annexe.index') }}">Afficher</a>
+                                    <a class="nav-link" href="{{ route('annexe.create') }}">Ajouter</a>
+                                </nav>
+                            </div>
+                        @endif
+                        {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseClients" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             Client
@@ -105,7 +104,7 @@
                                 <a class="nav-link" href="{{ route('client.index') }}">Afficher</a>
                                 <a class="nav-link" href="{{ route('client.create') }}">Ajouter</a>
                             </nav>
-                        </div>
+                        </div> --}}
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseFournisseurs" aria-expanded="false"
                             aria-controls="collapseLayouts">
@@ -250,7 +249,7 @@
             <main>
                 <div class="container-fluid px-4">
                     {{-- Tous le contenu extend ici --}}
-                    @if (session('success'))
+                    {{-- @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -262,10 +261,55 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                 aria-label="Fermer"></button>
                         </div>
-                    @endif
+                    @endif --}}
                     @yield('contenu')
 
                 </div>
+                <!-- Modal Notifications -->
+                <div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog">
+                        <div class="modal-content">
+
+                            <div
+                                class="modal-header @if (session('success')) bg-success text-white
+                @elseif (session('error')) bg-danger text-white @endif">
+                                <h5 class="modal-title">
+                                    @if (session('success'))
+                                        Succès
+                                    @elseif (session('error'))
+                                        Erreur
+                                    @endif
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Fermer"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                @if (session('success'))
+                                    {{ session('success') }}
+                                @elseif (session('error'))
+                                    {{ session('error') }}
+                                @endif
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Fermer</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                @if (session('success') || session('error'))
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            let alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                            alertModal.show();
+                        });
+                    </script>
+                @endif
             </main>
             <footer class="bg-light mt-auto py-4">
                 <div class="container-fluid px-4">

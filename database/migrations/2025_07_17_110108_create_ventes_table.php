@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('ventes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->string('nom_client');
+            $table->string('tel_client');
             $table->decimal('total', 10, 0);
             $table->date('date_vente');
             $table->string('mode_paiement')->default('espèces');

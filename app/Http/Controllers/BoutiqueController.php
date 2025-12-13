@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Boutique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class BoutiqueController extends Controller
 {
@@ -15,9 +16,14 @@ class BoutiqueController extends Controller
      */
     public function index()
     {
-        $boutiques = Boutique::get();
+        $user = auth()->user();
 
-        return view('G-boutique.Boutique.index', compact('boutiques'));
+        if ($user->role == 'super_admin' && $user->id == 1) {
+            $boutiques = Boutique::get();
+            return view('G-Boutique.Boutique.index', compact('boutiques'));
+        } else {
+            return back()->with('error', "Acccès refusé : Vous n'avez pas la permission d'accéder à cette page.");
+        }
     }
 
     /**
@@ -27,7 +33,13 @@ class BoutiqueController extends Controller
      */
     public function create()
     {
-        return view('G-Boutique.Boutique.create');
+        $user = auth()->user();
+
+        if ($user->role == 'super_admin' && $user->id == 1) {
+            return view('G-Boutique.Boutique.create');
+        } else {
+            return back()->with('error', "Acccès refusé : Vous n'avez pas la permission d'accéder à cette page.");
+        }
     }
 
     /**
@@ -41,15 +53,20 @@ class BoutiqueController extends Controller
         $request->validate([
             'nom' => 'required|string|max:100',
             'logo' => 'nullable|mimes:png,jpg,jpeg,PNG,JPG,JPEG|max:2048',
-            'email' => 'nullable|email|unique:boutiques,email',
+            'email' => [
+                'required',
+                'email',
+                'max:50',
+                Rule::unique('boutiques', 'email'), // 👈 empêche le doublon
+            ],
             'telephone'      => [
                 'required',
                 'digits:8',
                 'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
-                'unique:clients,telephone',
+                'unique:boutiques,telephone',
             ],
             'adresse' => 'nullable|string',
-            'type_boutique' => 'required|string',
+            // 'type_boutique' => 'required|string',
         ], [
             'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer une autre boutique avec cet email.',
             'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
@@ -57,7 +74,7 @@ class BoutiqueController extends Controller
             'telephone.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         ]);
 
-        $data = $request->only(['nom', 'email', 'telephone', 'adresse', 'type_boutique']);
+        $data = $request->only(['nom', 'email', 'telephone', 'adresse']);
 
         if ($request->hasFile('logo')) {
             $fichier = $request->file('logo');
@@ -86,8 +103,14 @@ class BoutiqueController extends Controller
      */
     public function show($id)
     {
-        $boutique = Boutique::findOrFail($id);
-        return view('G-Boutique.Boutique.show', compact('boutique'));
+        $user = auth()->user();
+
+        if ($user->role == 'super_admin' && $user->id == 1) {
+            $boutique = Boutique::findOrFail($id);
+            return view('G-Boutique.Boutique.show', compact('boutique'));
+        } else {
+            return back()->with('error', "Acccès refusé : Vous n'avez pas la permission d'accéder à cette page.");
+        }
     }
 
     /**
@@ -98,8 +121,14 @@ class BoutiqueController extends Controller
      */
     public function edit($id)
     {
-        $boutique = Boutique::findOrFail($id);
-        return view('G-Boutique.Boutique.edit', compact('boutique'));
+        $user = auth()->user();
+
+        if ($user->role == 'super_admin' && $user->id == 1) {
+            $boutique = Boutique::findOrFail($id);
+            return view('G-Boutique.Boutique.edit', compact('boutique'));
+        } else {
+            return back()->with('error', "Acccès refusé : Vous n'avez pas la permission d'accéder à cette page.");
+        }
     }
 
     /**
@@ -120,10 +149,10 @@ class BoutiqueController extends Controller
                 'required',
                 'digits:8',
                 'regex:/^(5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-9])[0-9]{6}$/',
-                'unique:clients,telephone',
+                'unique:boutiques,telephone',
             ],
             'adresse' => 'nullable|string',
-            'type_boutique' => 'required|string',
+            // 'type_boutique' => 'required|string',
         ], [
             'email.unique'   => 'Email déjà utilisé : vous ne pouvez pas enregistrer une autre boutique avec cet email.',
             'telephone.regex' => 'Le numéro doit commencer par 60 à 99 et contenir exactement 8 chiffres.',
@@ -132,7 +161,7 @@ class BoutiqueController extends Controller
         ]);
 
         $boutique = Boutique::findOrFail($id);
-        $data = $request->only(['nom', 'email', 'telephone', 'adresse', 'type_boutique']);
+        $data = $request->only(['nom', 'email', 'telephone', 'adresse']);
 
         if ($request->hasFile('logo')) {
             $fichier = $request->file('logo');

@@ -22,8 +22,11 @@
                     </div>
                     <div class="col-md-6">
                         <label for="iE" class="form-label">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" class="form-control"
+                        <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror"
                             id="iE">
+                            @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4">
                         <label for="iT" class="form-label">Telephone</label>

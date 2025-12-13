@@ -42,7 +42,7 @@
 
         <div class="client-info">
             <h3>Client :</h3>
-            <p>{{ $vente->client->prenom }} {{ $vente->client->nom }}</p>
+            <p>{{ $vente->nom_client }} - {{ $vente->tel_client }}</p>
         </div>
 
         <div class="vente-info">

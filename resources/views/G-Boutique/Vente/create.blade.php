@@ -1,7 +1,7 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Produits (stock)</h1>
+        <h1 class="mt-4">Espace vente</h1>
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center text-white">
                 <h4 class="row">Vente</h4>
@@ -139,7 +139,7 @@
                             <form id="formSubmitPanier" method="POST" action="{{ route('ventes.store') }}">
                                 @csrf
                                 <div class="row mb-3">
-                                    <div class="input-group mb-3">
+                                    {{-- <div class="input-group mb-3">
                                         <div class="flex-grow-1">
                                             <select id="client_id" name="client_id"
                                                 class="form-select select2 @error('client_id') is-invalid @enderror">
@@ -158,43 +158,61 @@
                                             <i class="fa-solid fa-user-plus"></i>
                                         </button>
                                     </div>
-
                                     @error('client_id')
                                         <div class="text-danger mt-1">{{ $message }}</div>
-                                    @enderror
-
-                                    <!-- Destinataire -->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="mode_paiement" class="form-label">Mode de paiement</label>
-                                            <select name="mode_paiement" id="mode_paiement"
-                                                class="form-select @error('mode_paiement') is-invalid @enderror">
-                                                <option value="">Sélectionner un mode de paiement</option>
-                                                <option value="espece"
-                                                    {{ old('mode_paiement') == 'espece' ? 'selected' : '' }}>Espèce
-                                                </option>
-                                                <option value="orangeMoney"
-                                                    {{ old('mode_paiement') == 'orangeMoney' ? 'selected' : '' }}>Orange
-                                                    Money</option>
-                                                <option value="cheque"
-                                                    {{ old('mode_paiement') == 'cheque' ? 'selected' : '' }}>Chèque
-                                                </option>
-                                            </select>
-                                            @error('mode_paiement')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="date_vente" class="form-label">Date</label>
-                                            <input type="date" class="form-control @error('date_vente') is-invalid @enderror"
-                                                name="date_vente" value="{{ old('date_vente') }}">
-                                            @error('date_vente')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                    @enderror --}}
+                                    <div class="col-md-6">
+                                        <label for="nom_client" class="form-label">Nom du client</label>
+                                        <input type="text" id="nom_client"
+                                            class="form-control @error('nom_client') is-invalid @enderror" name="nom_client"
+                                            placeholder="Nom du client" value="{{ old('nom_client') }}">
+                                        @error('nom_client')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
-
+                                    <div class="col-md-6">
+                                        <label for="tel_client" class="form-label">Téléphone du client</label>
+                                        <input type="text" id="tel_client"
+                                            class="form-control @error('tel_client') is-invalid @enderror" name="tel_client"
+                                            placeholder="Téléphone du client" value="{{ old('tel_client') }}">
+                                        @error('tel_client')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
+                                <!-- Destinataire -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="mode_paiement" class="form-label">Mode de paiement</label>
+                                        <select name="mode_paiement" id="mode_paiement"
+                                            class="form-select @error('mode_paiement') is-invalid @enderror">
+                                            <option value="">Sélectionner un mode de paiement</option>
+                                            <option value="espece"
+                                                {{ old('mode_paiement') == 'espece' ? 'selected' : '' }}>Espèce
+                                            </option>
+                                            <option value="orangeMoney"
+                                                {{ old('mode_paiement') == 'orangeMoney' ? 'selected' : '' }}>Orange
+                                                Money</option>
+                                            <option value="cheque"
+                                                {{ old('mode_paiement') == 'cheque' ? 'selected' : '' }}>Chèque
+                                            </option>
+                                        </select>
+                                        @error('mode_paiement')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="date_vente" class="form-label">Date</label>
+                                        <input type="date"
+                                            class="form-control @error('date_vente') is-invalid @enderror"
+                                            name="date_vente" value="{{ old('date_vente') }}">
+                                        @error('date_vente')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
 
                                 {{-- <input type="hidden" name="etat" value="{{ old('etat', 'en_attente') }}">
                                     <input type="hidden" name="entreprise_id" value="{{ auth()->user()->entreprise_id }}">
@@ -207,8 +225,7 @@
                                         class="btn btn-primary">
                                         <i class="fas fa-fw fa-save"></i>
                                         <span>Enregistré & Imprimé</span></button>
-                                    <button type="submit" name="action" value="valider"
-                                        class="btn btn-warning">
+                                    <button type="submit" name="action" value="valider" class="btn btn-warning">
                                         <i class="fas fa-fw fa-save"></i>
                                         <span>Enregistré</span></button>
                                     <a href="{{ route('panier.vider') }}" class="btn btn-outline-secondary"><i

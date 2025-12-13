@@ -1,11 +1,11 @@
 @extends('../G-Boutique/layouts')
 @section('contenu')
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Fournisseur</h1>
+        <h1 class="mt-4">Vente</h1>
         <div class="card">
             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
-                <h5 style="color:white;">Modifier un fournisseur</h5>
-                <a href="{{ route('fournisseur.index') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-list"></i>
+                <h5 style="color:white;">Modifier un produit</h5>
+                <a href="{{ route('produit.index') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-list"></i>
                     Liste</a>
             </div>
             <div class="card-body px-4 py-3">

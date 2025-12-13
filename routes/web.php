@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth', 'is-admin']], function () {
 Route::resource('/dashboard', DashboardController::class);
 Route::resource('/boutique', BoutiqueController::class);
 Route::resource('/annexe', AnnexeController::class);
-Route::resource('/client', ClientController::class);
+// Route::resource('/client', ClientController::class);
 Route::resource('/fournisseur', FournisseurController::class);
 Route::resource('/categorie', CategorieController::class);
 Route::resource('/produit', ProduitController::class);

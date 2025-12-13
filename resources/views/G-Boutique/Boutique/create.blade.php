@@ -28,12 +28,15 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="iE" class="form-label">Email</label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="form-control"
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror"
                                 id="iE">
+                                @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="iT" class="form-label">Telephone</label>
                             <input type="text" name="telephone" value="{{ old('telephone') }}"
                                 class="form-control @error('telephone') is-invalid @enderror" id="iT">
@@ -41,14 +44,13 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="iA" class="form-label">Adresse</label>
                             <input type="text" name="adresse" value="{{ old('adresse') }}" class="form-control"
                                 id="iA">
                         </div>
-
+                    </div>
+                    {{-- <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="iTb" class="form-label">Type de boutique</label>
                             <select name="type_boutique" id="iTb"
@@ -67,8 +69,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                    </div>
+                    </div> --}}
                     <div class="card-footer text-center">
                         <button type="submit" class="btn btn-primary">
                             <i class="fa-solide fa-fw fa-save"></i>

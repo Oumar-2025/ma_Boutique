@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -45,12 +46,22 @@ class UserController extends Controller
     {
          $request->validate([
             'name' => 'required|string|max:50',
-            'email' => 'required|email|max:50',
+            'email' => [
+            'required',
+            'email',
+            'max:50',
+            Rule::unique('users', 'email'), // 👈 empêche le doublon
+        ],
             // 'ville_id' => 'required|string|max:50',
             'role' => 'required|string',
             'boutique_id' => 'nullable|exists:boutiques,id',
             'annexe_id' => 'nullable|exists:annexes,id',
-        ]);
+        ], [
+        // 🎯 Messages personnalisés
+        'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+        'email.required' => 'Le champ email est obligatoire.',
+        'email.email' => 'Veuillez saisir une adresse email valide.',
+    ]);
 
         // 🔐 Générer un mot de passe aléatoire
         $plainPassword = Str::random(8); // ex: "a8fjLk9P2z"
@@ -68,7 +79,7 @@ class UserController extends Controller
 
 
     // 🔁 Rediriger vers la page avec la modale et le mot de passe
-    return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès');
+    return redirect()->route('users.index')->with('success', "Utilisateur créé avec succès");
 
     }
 

@@ -11,7 +11,9 @@ class Vente extends Model
 
     protected $table = 'ventes';
     protected $fillable = [
-        'client_id'   ,
+        // 'client_id'   ,
+        'nom_client'  ,
+        'tel_client'  ,
         'date_vente'  ,
         'mode_paiement',
         'total'       ,
@@ -20,10 +22,10 @@ class Vente extends Model
         'user_id'  ,
     ];
 
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
-    }
+    // public function client()
+    // {
+    //     return $this->belongsTo(Client::class);
+    // }
 
     public function details()
     {

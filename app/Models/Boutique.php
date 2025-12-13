@@ -15,6 +15,6 @@ class Boutique extends Model
         'email',
         'adresse',
         'telephone',
-        'type_boutique',
+        // 'type_boutique',
     ];
 }

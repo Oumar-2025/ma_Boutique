@@ -11,7 +11,7 @@
             <div class="card-body px-4 py-3">
 
                 <h3>Nom du client :</h3>
-                <p>{{ $vente->client->prenom }} {{ $vente->client->nom }}</p>
+                <p>{{ $vente->nom_client }} - {{ $vente->tel_client }}</p>
 
                 <table class="table">
                     <thead>

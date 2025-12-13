@@ -23,7 +23,7 @@
                     <tbody>
                         @forelse ($ventes as $vente)
                             <tr class="text-center">
-                                <td>{{ $vente->client->prenom }} {{ $vente->client->nom }}</td>
+                                <td>{{ $vente->nom_client }} {{ $vente->tel_client }}</td>
                                 <td>{{ $vente->total }} Fcfa en {{ $vente->mode_paiement }}</td>
                                 <td>{{ $vente->date_vente }}</td>
                                 <td>

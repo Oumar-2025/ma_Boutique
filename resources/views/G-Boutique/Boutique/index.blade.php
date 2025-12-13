@@ -15,7 +15,7 @@
                             <th>Nom</th>
                             <th>Téléphone</th>
                             <th>Adresse</th>
-                            <th>Type de boutiques</th>
+                            {{-- <th>Type de boutiques</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -27,7 +27,7 @@
                                 <td>{{ $boutique->nom }}</td>
                                 <td>{{ $boutique->telephone }}</td>
                                 <td>{{ $boutique->adresse }}</td>
-                                <td>{{ $boutique->type_boutique }}</td>
+                                {{-- <td>{{ $boutique->type_boutique }}</td> --}}
                                 <td>
                                     <a href="{{ route('boutique.show', $boutique->id) }}" class="btn btn-link">
                                         <i class="fas fa-eye"></i>

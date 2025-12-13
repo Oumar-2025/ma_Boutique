@@ -30,10 +30,10 @@
                         <th>Adresse</th>
                         <td>{{ $boutique->adresse }}</td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <th>Type de boutiques</th>
                         <td>{{ $boutique->type_boutique }}</td>
-                    </tr>
+                    </tr> --}}
                 </table>
             </div>
         </div>
