@@ -26,5 +26,8 @@ class SuperAdminSeeder extends Seeder
                 'plain_password' => 'password123', // ⚠️ doit exister dans ta table
             ]);
         }
+
+        //Commande pour envoyer des infos dans table user: php artisan db:seed  
+        //Pour générer une app_key code : php artisan key:generate
     }
 }

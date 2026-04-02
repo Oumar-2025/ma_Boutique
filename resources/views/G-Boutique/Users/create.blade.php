@@ -55,13 +55,13 @@
                             <label for="iA" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
                                 <option value="#">--Choisir--</option>
-                                <option value="admin" {{ old('admin') == 'admin' ? 'selected' : ''}}>Admin</option>
+                                <option value="gerant" {{ old('gerant') == 'gerant' ? 'selected' : ''}}>Gérant(e)</option>
                             </select>
                             @error('role')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        @elseif(auth()->user()->role == 'admin' && auth()->user()->boutique_id != null)
+                        @elseif(auth()->user()->role == 'gerant' && auth()->user()->boutique_id != null)
                         <div class="col-md-4">
                             <label for="iA" class="form-label">Boutique</label>
                             <input type="hidden" name="boutique_id" value="{{auth()->user()->boutique_id}}">
@@ -86,7 +86,6 @@
                             <label for="iA" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
                                 <option value="#">--Choisir--</option>
-                                <option value="gerant" {{ old('gerant') == 'gerant' ? 'selected' : ''}}>Gérant(e)</option>
                                 <option value="caissier" {{ old('caissier') == 'caissier' ? 'selected' : ''}}>Caissier(e)</option>
                             </select>
                             @error('role')

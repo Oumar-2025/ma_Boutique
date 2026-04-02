@@ -105,6 +105,7 @@
                                 <a class="nav-link" href="{{ route('client.create') }}">Ajouter</a>
                             </nav>
                         </div> --}}
+                        @if(in_array(auth()->user()->role, ['super_admin', 'gerant']))
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseFournisseurs" aria-expanded="false"
                             aria-controls="collapseLayouts">
@@ -133,6 +134,8 @@
                                 <a class="nav-link" href="{{ route('categorie.create') }}">Ajouter</a>
                             </nav>
                         </div>
+                        @endif
+
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseProduits" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -142,10 +145,15 @@
                         <div class="collapse" id="collapseProduits" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin', 'gerant']))
                                 <a class="nav-link" href="{{ route('produit.index') }}">Afficher</a>
                                 <a class="nav-link" href="{{ route('produit.create') }}">Ajouter</a>
+                                @elseif(auth()->user()->role == 'caissier')
+                                 <a class="nav-link" href="{{ route('produit.index') }}">Afficher</a>
+                                 @endif
                             </nav>
                         </div>
+                        @if(in_array(auth()->user()->role, ['super_admin', 'gerant']))
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseAchats" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -159,6 +167,7 @@
                                 <a class="nav-link" href="{{ route('achats.create') }}">Ajouter</a>
                             </nav>
                         </div>
+                        @endif
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseVente" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -185,6 +194,7 @@
                                 <a class="nav-link" href="{{ route('depenses.create') }}">Ajouter</a>
                             </nav>
                         </div>
+                        @if (in_array(auth()->user()->role, ['super_admin', 'admin', 'gerant']))
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseEmploye" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -237,8 +247,10 @@
                                 <a class="nav-link" href="{{ route('users.create') }}">Ajouter</a>
                             </nav>
                         </div>
+                        @endif
                     </div>
                 </div>
+
                 {{-- <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
                     Start Bootstrap

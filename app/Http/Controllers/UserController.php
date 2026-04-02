@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Annexe;
 use App\Models\Boutique;
 use App\Models\User;
@@ -74,12 +75,26 @@ class UserController extends Controller
         // $data['user_id'] = auth()->user()->id;
         // $data['creer_par'] = auth()->user()->id;
 
-        //créer un utilisateur
+        // 4️⃣ Créer l'utilisateur avec gestion d'erreur
+    try {
+        DB::beginTransaction();
+
         User::create($data);
 
+        DB::commit();
 
-    // 🔁 Rediriger vers la page avec la modale et le mot de passe
-    return redirect()->route('users.index')->with('success', "Utilisateur créé avec succès");
+        // 🔁 Redirection avec succès + mot de passe
+        return redirect()->route('users.index')
+                         ->with('success', "Utilisateur créé avec succès. Mot de passe : {$plainPassword}");
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        // ⚠️ Affichage d'un message d'erreur clair
+        return redirect()->back()
+                         ->withInput()
+                         ->with('error', 'Impossible de créer l’utilisateur : ' . $e->getMessage());
+    }
 
     }
 
